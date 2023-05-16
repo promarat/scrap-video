@@ -125,7 +125,7 @@ ipcMain.handle("send_search_query", async (event, movie_name) => {
       for (let item of tenItems) {
         const mlists = await getMovieFileFromWebsiteUrl(item.link);
         if (mlists.length) {
-          stackRes = [...stackRes, ...res];
+          stackRes = [...stackRes, ...mlists];
         } 
       }
       console.log("===========================================");
