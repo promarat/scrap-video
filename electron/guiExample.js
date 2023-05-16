@@ -92,8 +92,8 @@ const startCodeFunction = () => {
 const sendCodeFunction = () => {
   const stringToSend = document.getElementById("string_to_send").value;
   printBoth(`Sending "${stringToSend}" to program`);
-  sendToProgram(stringToSend); // Real
-  // sendToProgramTest(stringToSend); //Test
+  // sendToProgram(stringToSend); // Real
+  sendToProgramTest(stringToSend); //Test
 };
 
 const sendDownloadRequest = (event) => {

@@ -11,6 +11,8 @@ const cheerio = require('cheerio');
 
 const API_KEY = 'AIzaSyAGU8VlGdfd4h6R99scoD8ph0UoIugETH0';
 const CX = '54ede4d7347744cb6';
+// const CX = 'f1983f55b40a34a01';
+
 const numResults = 30;
 
 const nodeConsole = require("console");
