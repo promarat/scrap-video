@@ -58,7 +58,7 @@ function tableCreate(searchResults) {
         ${eRes.title}
       </h5>
       </a>
-      <button class="download-btn">Download</button>
+      <button class="download-btn" value="${eRes.sourceUrl}">Download</button>
     </div>`;
   }
   var tmpObj=document.createElement("div");
@@ -90,8 +90,11 @@ const sendCodeFunction = () => {
   sendToProgram(stringToSend);
 };
 
-const sendDownloadRequest = (e) => {
-  console.log(e);
+const sendDownloadRequest = (event) => {
+  console.log(event);
+  if (event.target.tagName === 'BUTTON') {
+    console.log(event.target);
+  }
 }
 
 
@@ -101,6 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", sendCodeFunction);
 
   document
-    .querySelectorAll(".download-btn")
+    .querySelectorAll("#result-wrap")
     .addEventListener("click", sendDownloadRequest)
 });
