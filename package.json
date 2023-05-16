@@ -1,19 +1,33 @@
 {
-    "name": "electron-gui",
-    "version": "0.1.0",
-    "main": "./electron/main.js",
-    "scripts": {
-        "start": "electron ."
-    },
-    "devDependencies": {
-        "electron": "^24.3.0"
-    },
-    "dependencies": {
-        "axios": "^1.4.0",
-        "cheerio": "^1.0.0-rc.12",
-        "electron-download-manager": "^2.1.2",
-        "google-it": "^1.6.4",
-        "googleapis": "^118.0.0",
-        "jquery": "^3.7.0"
-    }
+  "name": "electron-gui",
+  "version": "0.1.0",
+  "description": "scrap the movies from google search.",
+  "author": {
+    "name": "Pro Dev",
+    "email": "prodev@example.com",
+    "url": "https://example.com/"
+  },
+  "main": "./electron/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.1.1",
+    "@electron-forge/maker-deb": "^6.1.1",
+    "@electron-forge/maker-rpm": "^6.1.1",
+    "@electron-forge/maker-squirrel": "^6.1.1",
+    "@electron-forge/maker-zip": "^6.1.1",
+    "electron": "^24.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
+    "electron-download-manager": "^2.1.2",
+    "electron-squirrel-startup": "^1.0.0",
+    "google-it": "^1.6.4",
+    "googleapis": "^118.0.0",
+    "jquery": "^3.7.0"
+  }
 }

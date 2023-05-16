@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, Notification } = require("electron");
+const DownloadManager = require("electron-download-manager");
 const exec = require("child_process").exec;
 const path = require("path");
 const { google } = require('googleapis');
@@ -196,6 +197,35 @@ ipcMain.handle("send_search_query", async (event, movie_name) => {
     }
   }
 })
+
+
+ipcMain.on("download_request", (event, url) => {
+  // const options = {
+  //   url: url,
+  //   onProgress: (percent) => {
+  //     console.log(`Download progress: ${percent}%`);
+  //   }
+  // };
+
+  DownloadManager.register({
+    downloadFolder: app.getPath("downloads")
+  });
+
+  DownloadManager.download({
+    url: url,
+    onProgress: ((progress, item) => {
+      console.log(progress);
+      console.log(item);
+    })
+  }, function (error, info) {
+    if (error) {
+        console.log(error);
+        return;
+    }
+
+    console.log("DONE: " + info.url);
+});
+});
 
 ipcMain.on("open_json_file_async", () => {
   const fs = require("fs");

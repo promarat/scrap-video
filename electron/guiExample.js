@@ -92,14 +92,14 @@ const startCodeFunction = () => {
 const sendCodeFunction = () => {
   const stringToSend = document.getElementById("string_to_send").value;
   printBoth(`Sending "${stringToSend}" to program`);
-  // sendToProgram(stringToSend); // Real
-  sendToProgramTest(stringToSend); //Test
+  sendToProgram(stringToSend); // Real
+  // sendToProgramTest(stringToSend); //Test
 };
 
 const sendDownloadRequest = (event) => {
-  console.log(event);
   if (event.target.tagName === 'BUTTON') {
-    console.log(event.target.value);
+    const sUrl = event.target.value;
+    ipcRenderer.send('download_request', sUrl);
   }
 }
 
