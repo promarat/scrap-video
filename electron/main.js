@@ -119,9 +119,8 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
   console.log(`Received from frontend: ${movie_name}`);
   let stackRes = [];
   try {
-    const mlists = await getMovieFileFromWebsiteUrl(item.link, item.title);
+    const mlists = await getMovieFileFromWebsiteUrl("https://www.vdocipher.com/blog/2020/09/encrypted-video-streaming-vdocipher-technology-details/", "Secure Your Videos with Vdocipher Video Streaming Solution");
     if (mlists.length) {
-      // stackRes = [...stackRes, ...mlists];
       mlists.map((mlist) => {
         let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
         if (!fres.length) {
