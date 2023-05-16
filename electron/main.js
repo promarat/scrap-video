@@ -133,8 +133,8 @@ ipcMain.handle("send_search_query", async (event, movie_name) => {
       for (let item of tenItems) {
         const mlists = await getMovieFileFromWebsiteUrl(item.link, item.title);
         if (mlists.length) {
-          stackRes = [...stackRes, ...mlists];
-          mlists.map((idx, mlist) => {
+          // stackRes = [...stackRes, ...mlists];
+          mlists.map((mlist) => {
             let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
             if (!fres.length) {
               stackRes.push(mlist);
