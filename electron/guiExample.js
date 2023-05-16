@@ -99,7 +99,7 @@ const sendCodeFunction = () => {
 const sendDownloadRequest = (event) => {
   console.log(event);
   if (event.target.tagName === 'BUTTON') {
-    console.log(event.target);
+    console.log(event.target.value);
   }
 }
 
