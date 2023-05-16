@@ -90,9 +90,17 @@ const sendCodeFunction = () => {
   sendToProgram(stringToSend);
 };
 
+const sendDownloadRequest = (e) => {
+  console.log(e);
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("send_code")
     .addEventListener("click", sendCodeFunction);
+
+  document
+    .querySelectorAll(".download-btn")
+    .addEventListener("click", sendDownloadRequest)
 });
