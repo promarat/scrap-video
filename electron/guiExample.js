@@ -47,15 +47,11 @@ function tableCreate(searchResults) {
     html += `
     <div class="card-list">
       <h2 class="movie-title">
-        Movie
+        ${eRes}
       </h2>
       <div class="card-content">
-      
         <div class="thumbnail">
-          <video src="${eRes}"></video>
-        </div>
-        <div class="description">
-        
+          <video width="200" height="100" src="${eRes}"></video>
         </div>
       </div>
       <button class="download-btn">Download</button>

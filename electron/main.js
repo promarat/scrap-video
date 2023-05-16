@@ -95,8 +95,12 @@ const getMovieFileFromWebsiteUrl = async (wUrl) => {
     
     videoSources = [];
     videoTags.each((index, element) => {
-      console.log($(element).attr('src'));
-      videoSources.push($(element).attr('src'));
+      let sourceUrl = $(element).attr('src');
+      if (!sourceUrl) {
+        if ($(element).find("source").attr('src')) sourceUrl = $(element).find("source").attr('src');
+        else sourceUrl = "";
+      }
+      videoSources.push(sourceUrl);
     })
 
     return videoSources;
