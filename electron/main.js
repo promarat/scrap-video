@@ -24,7 +24,7 @@ function printBoth(str) {
 // Create the browser window.
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 990,
+    width: 900,
     height: 600,
     resizable: true,
     webPreferences: {
@@ -84,7 +84,7 @@ ipcMain.on("open_json_file_sync", () => {
   });
 });
 
-const getMovieFileFromWebsiteUrl = async (wUrl) => {
+const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
   console.log(wUrl);
   // const testUrl = "https://www.vdocipher.com/blog/2020/09/encrypted-video-streaming-vdocipher-technology-details/";
   try {
@@ -100,7 +100,11 @@ const getMovieFileFromWebsiteUrl = async (wUrl) => {
         if ($(element).find("source").attr('src')) sourceUrl = $(element).find("source").attr('src');
         else sourceUrl = "";
       }
-      videoSources.push(sourceUrl);
+      videoSources.push({
+        sourceUrl,
+        title,
+        wUrl
+      });
     })
 
     return videoSources;
@@ -127,7 +131,7 @@ ipcMain.handle("send_search_query", async (event, movie_name) => {
       });
       let tenItems = res.data.items;
       for (let item of tenItems) {
-        const mlists = await getMovieFileFromWebsiteUrl(item.link);
+        const mlists = await getMovieFileFromWebsiteUrl(item.link, item.title);
         if (mlists.length) {
           stackRes = [...stackRes, ...mlists];
         } 

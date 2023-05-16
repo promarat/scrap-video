@@ -59,17 +59,20 @@ button#send_code {
 }
 
 button.download-btn{
-    max-width: 300px;
+    width: 100%;
     color: #161616;
     padding: 7px;
     border: none;
     font-size: 11px;
     cursor: pointer;
-    margin: 5px;
     border-radius: 4px;
     text-transform: uppercase;
     font-weight: 500;
     transition: background-color 0.3s;
+}
+
+button.download-btn:hover{
+    box-shadow: 0px 0px 3px #585858;
 }
 
 a {
@@ -86,13 +89,29 @@ body {
     padding:1.5em;
     background: #f5f5f5
   }
+
+.result-content{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.result-content::after{
+    content: "";
+    flex: auto;
+}
   
 .card-list{
-    padding: 10px;
+    padding: 15px;
     color: white;
-    background-image: linear-gradient(to bottom right, #00bfad, #99a3d4);
+    box-sizing: border-box;
+    /* background-image: linear-gradient(to bottom right, #00bfad, #99a3d4); */
     margin-bottom: 2px;
     border-radius: 5px;
+    width: 196px;
+    margin: 8px 4px;
+    box-shadow: 0px 0px 3px black;
+    background-color: white;
 }
 
 .card-title{
@@ -101,20 +120,29 @@ body {
 
 .movie-title{
     margin: 10px 0;
-}
-
-.movie-title a{
-    color: white;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #333;
 }
 
 .card-content{
     display: flex;
     margin-bottom: 5px;
+    justify-content: center;
 }
 
-.thumbnail img{
-    border-radius: 10px;
-    border: 2px solid white;
+.thumbnail{
+    width: 100%;
+    text-align: center;
+}
+
+.thumbnail video{
+    border: 1px solid #333333;
+    border-radius: 5px;
+    width: 100%;
+    aspect-ratio: 148/83;
 }
 
 .description{

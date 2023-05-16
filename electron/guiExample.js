@@ -46,14 +46,16 @@ function tableCreate(searchResults) {
   for (let eRes of searchResults) {
     html += `
     <div class="card-list">
-      <h2 class="movie-title">
-        ${eRes}
-      </h2>
+      <a href="${eRes.wUrl}">
       <div class="card-content">
         <div class="thumbnail">
-          <video width="200" height="100" src="${eRes}"></video>
+          <video src="${eRes.sourceUrl}"></video>
         </div>
       </div>
+      <h5 class="movie-title">
+        ${eRes.title}
+      </h5>
+      </a>
       <button class="download-btn">Download</button>
     </div>`;
   }
