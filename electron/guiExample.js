@@ -103,7 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("send_code")
     .addEventListener("click", sendCodeFunction);
 
-  document
-    .querySelectorAll("#result-wrap")
+  document.getElementById("result-wrap")
     .addEventListener("click", sendDownloadRequest)
 });
