@@ -34,6 +34,8 @@ const sendToProgram = (str) => {
       tableCreate(movieArray);
       console.log(result, "result");
     } else {
+      movieArray = result.data;
+      tableCreate(movieArray);
       console.error(result.message);
     }
   });

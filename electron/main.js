@@ -161,6 +161,7 @@ ipcMain.handle("send_search_query", async (event, movie_name) => {
     console.error(error);
     return {
       status: "failed",
+      data: stackRes,
       message: error
     }
   }
