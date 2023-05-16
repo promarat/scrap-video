@@ -114,6 +114,37 @@ const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
   }
 }
 
+ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
+
+  console.log(`Received from frontend: ${movie_name}`);
+  let stackRes = [];
+  try {
+    const mlists = await getMovieFileFromWebsiteUrl(item.link, item.title);
+    if (mlists.length) {
+      // stackRes = [...stackRes, ...mlists];
+      mlists.map((mlist) => {
+        let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
+        if (!fres.length) {
+          stackRes.push(mlist);
+        }
+      })
+    }
+    console.log(stackRes);
+    return {
+      status: "success",
+      data: stackRes
+    }
+
+  } catch (error) {
+    console.error(error);
+    return {
+      status: "failed",
+      data: stackRes,
+      message: error
+    }
+  }
+})
+
 ipcMain.handle("send_search_query", async (event, movie_name) => {
 
   console.log(`Received from frontend: ${movie_name}`);
@@ -129,7 +160,7 @@ ipcMain.handle("send_search_query", async (event, movie_name) => {
         start: startIndex,
         num: 10
       });
-      console.log("totallllllllllllllllllll", res.data.searchInformation.totalResults);
+      console.log("total", res.data.searchInformation.totalResults);
       let tenItems = res.data.items;
       for (let item of tenItems) {
         const mlists = await getMovieFileFromWebsiteUrl(item.link, item.title);

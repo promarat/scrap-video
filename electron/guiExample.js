@@ -20,14 +20,6 @@ const printBoth = (str) => {
 };
 
 const sendToProgram = (str) => {
-  // child.stdin.write(str);
-  // child.stdout.on("data", (data) => {
-  //   printBoth(
-  //     `Following data has been piped from python program: ${data.toString(
-  //       "utf8"
-  //     )}`
-  //   );
-  // });
   ipcRenderer.invoke("send_search_query", str).then((result) => {
     if (result.status == "success") {
       movieArray = result.data;
@@ -39,7 +31,20 @@ const sendToProgram = (str) => {
       console.error(result.message);
     }
   });
+};
 
+const sendToProgramTest = (str) => { //Test
+  ipcRenderer.invoke("send_search_query_test", str).then((result) => {
+    if (result.status == "success") {
+      movieArray = result.data;
+      tableCreate(movieArray);
+      console.log(result, "result");
+    } else {
+      movieArray = result.data;
+      tableCreate(movieArray);
+      console.error(result.message);
+    }
+  });
 };
 
 function tableCreate(searchResults) {
@@ -87,7 +92,8 @@ const startCodeFunction = () => {
 const sendCodeFunction = () => {
   const stringToSend = document.getElementById("string_to_send").value;
   printBoth(`Sending "${stringToSend}" to program`);
-  sendToProgram(stringToSend);
+  // sendToProgram(stringToSend); // Real
+  sendToProgramTest(stringToSend); //Test
 };
 
 const sendDownloadRequest = (event) => {
