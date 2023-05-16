@@ -10,7 +10,7 @@ const cheerio = require('cheerio');
 
 const API_KEY = 'AIzaSyAGU8VlGdfd4h6R99scoD8ph0UoIugETH0';
 const CX = '54ede4d7347744cb6';
-const numResults = 2;
+const numResults = 30;
 
 const nodeConsole = require("console");
 const myConsole = new nodeConsole.Console(process.stdout, process.stderr);
