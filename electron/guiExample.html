@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src *; img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">
+    <title>Movies</title>
+    <link rel="stylesheet" href="guiExample.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="response_data"></div>
+      <div class="searchbox-wrap">
+        <input
+          id="string_to_send"
+          type="text"
+          placeholder="Enter the string to send to program"
+        />
+        <button id="send_code">Search</button>
+      </div>
+      <div class="result-content" id="result-wrap">
+        
+      </div>
+    </div>
+  </body>
+</html>

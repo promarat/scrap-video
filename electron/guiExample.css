@@ -1,0 +1,122 @@
+body {
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    background-color: #F5F5F5;
+    color: #212121;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.searchbox-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 36px;
+    font-weight: 300;
+    color: #3C4043;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    background-color: #FFFFFF;
+    color: #212121;
+    border: 1px solid #DADCE0;
+    border-radius: 4px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+input[type="text"]:focus {
+    border: 1px solid #4285F4;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+}
+
+button#send_code {
+    max-width: 300px;
+    background-color: #464646;
+    color: #FFFFFF;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+button.download-btn{
+    max-width: 300px;
+    color: #161616;
+    padding: 7px;
+    border: none;
+    font-size: 11px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+a {
+    color: #4285F4;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #2B7DE9;
+    text-decoration: underline;
+}
+
+body {
+    padding:1.5em;
+    background: #f5f5f5
+  }
+  
+.card-list{
+    padding: 10px;
+    color: white;
+    background-image: linear-gradient(to bottom right, #00bfad, #99a3d4);
+    margin-bottom: 2px;
+    border-radius: 5px;
+}
+
+.card-title{
+    display: flex;
+}
+
+.movie-title{
+    margin: 10px 0;
+}
+
+.movie-title a{
+    color: white;
+}
+
+.card-content{
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.thumbnail img{
+    border-radius: 10px;
+    border: 2px solid white;
+}
+
+.description{
+    padding: 15px;
+}
