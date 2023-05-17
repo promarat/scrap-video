@@ -144,7 +144,6 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
       let searchResponse = await axios.get(searchUrl);
       // console.log(searchResponse);
       let $ = cheerio.load(searchResponse.data);
-      var dd = $('title').text();
       let urlLists = [];
       $("a").each(async (index, aTag) => {
         let wUrl = $(aTag).attr("href");
