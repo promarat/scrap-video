@@ -1,20 +1,14 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, Notification } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const DownloadManager = require("electron-download-manager");
 const exec = require("child_process").exec;
 const path = require("path");
-const { google } = require('googleapis');
-const customsearch = google.customsearch('v1');
 
 const axios = require('axios');
 const cheerio = require('cheerio');
 
 const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-
-const API_KEY = 'AIzaSyAGU8VlGdfd4h6R99scoD8ph0UoIugETH0';
-const CX = '54ede4d7347744cb6';
-// const CX = 'f1983f55b40a34a01';
 
 const numResults = 5;
 
@@ -63,25 +57,24 @@ app.whenReady().then(async() => {
 
   let options = new chrome.Options();
   options.addArguments('--headless');
-  driver = await new Builder()
-    .forBrowser(Browser.CHROME)
-    .setChromeOptions(options)
-    .build();
-
-  await driver.get('https://www.google.com/ncr');
-  driver.findElement(By.id("L2AGLb"))
-    .then(acceptButton => {
-      acceptButton.click();
-    })
-    .catch(error => {
-      console.log("no accept button");
-    })
+  try{
+    driver = await new Builder()
+      .forBrowser(Browser.CHROME)
+      // .setChromeOptions(options)
+      .build();
+  
+    await driver.get('https://www.google.com/ncr');
+    await driver.findElement(By.id("L2AGLb"));
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on("window-all-closed", function () {
+app.on("window-all-closed", async function () {
+  await driver.quit();
   if (process.platform !== "darwin") app.quit();
 });
 
@@ -93,18 +86,6 @@ ipcMain.on("execute", (command) => {
     if (error !== null) {
       console.log("exec error: " + error);
     }
-  });
-});
-
-ipcMain.on("open_json_file_sync", () => {
-  const fs = require("fs");
-
-  fs.readFile("config.json", function (err, data) {
-    if (err) {
-      return console.error(err);
-    }
-    printBoth("Called through ipc.send from guiExample.js");
-    printBoth("Asynchronous read: " + data.toString());
   });
 });
 
@@ -207,7 +188,6 @@ ipcMain.handle("send_search_query", async (event, movie_name) => { //Test
         console.log(eUrl);
         const mlists = await getMovieFileFromWebsiteUrl(eUrl, eUrl);
         if (mlists.length) {
-          // stackRes = [...stackRes, ...mlists];
           mlists.map((mlist) => {
             let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
             if (!fres.length) {
@@ -216,7 +196,12 @@ ipcMain.handle("send_search_query", async (event, movie_name) => { //Test
           })
         }
       }
-
+      await driver.get('https://www.google.com/ncr');
+      try{
+        await driver.findElement(By.id("L2AGLb"));
+      } catch (err) {
+        console.log(err);
+      }
       return {
         status: "success",
         data: stackRes
