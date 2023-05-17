@@ -65,7 +65,7 @@ app.whenReady().then(async() => {
   options.addArguments('--headless');
   driver = await new Builder()
     .forBrowser(Browser.CHROME)
-    // .setChromeOptions(options)
+    .setChromeOptions(options)
     .build();
 
   await driver.get('https://www.google.com/ncr');

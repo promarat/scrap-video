@@ -56,10 +56,10 @@ function tableCreate(searchResults) {
   var resultWrap = document.getElementById('result-wrap');
   var html = "";
   for (let eRes of searchResults) {
+    console.log(eRes);
     html += `<button class="item-list" value="${eRes.sourceUrl}>${eRes.fname}</button>`;
   }
-  var tmpObj=document.createElement("div");
-  tmpObj.innerHTML = html;
+  console.log(html);
   resultWrap.innerHTML = html;
 }
 
