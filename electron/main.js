@@ -13,7 +13,7 @@ const API_KEY = 'AIzaSyAGU8VlGdfd4h6R99scoD8ph0UoIugETH0';
 const CX = '54ede4d7347744cb6';
 // const CX = 'f1983f55b40a34a01';
 
-const numResults = 30;
+const numResults = 5;
 
 const nodeConsole = require("console");
 const myConsole = new nodeConsole.Console(process.stdout, process.stderr);
@@ -138,15 +138,28 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
   let stackRes = [];
   try {
 
-    const searchUrl = `https://www.google.com/search?q=-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`;
-
-    let searchResponse = await axios.get(searchUrl);
-    let $ = cheerio.load(searchResponse.data);
-    $("rso").find("a").each(async (aTag) => {
-      const wUrl = $(aTag).attr("href");
-      let domain = getDomainName(wUrl);
-      if (domain && domain != "www.google.com") {
-        const mlists = await getMovieFileFromWebsiteUrl(wUrl, wUrl);
+    for (let i = 0; ; i = i + 10) {
+      const searchUrl = `https://www.google.com/search?q="-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"&start=${i}`;
+  
+      let searchResponse = await axios.get(searchUrl);
+      // console.log(searchResponse);
+      let $ = cheerio.load(searchResponse.data);
+      var dd = $('title').text();
+      let urlLists = [];
+      $("a").each(async (index, aTag) => {
+        let wUrl = $(aTag).attr("href");
+        if (wUrl.indexOf("/url?q=") == 0){
+          wUrl = wUrl.substring(7);
+          let domain = getDomainName(wUrl);
+          if (domain && domain.indexOf("google.com") == -1) {
+            urlLists.push(wUrl);
+          }
+        }
+      })
+      
+      for(let eUrl of urlLists) {
+        console.log(eUrl);
+        const mlists = await getMovieFileFromWebsiteUrl(eUrl, eUrl);
         if (mlists.length) {
           // stackRes = [...stackRes, ...mlists];
           mlists.map((mlist) => {
@@ -157,11 +170,14 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
           })
         } 
       }
-    })
 
-    console.log("===========================================");
-    console.log(stackRes.length);
-    console.log("===========================================");
+      if (!urlLists.length || stackRes.length >= numResults) break;
+    }
+
+
+    // console.log("===========================================");
+    // console.log(stackRes.length);
+    // console.log("===========================================");
     // if (stackRes.length >= numResults) break;
     // console.log(res);
     // const mlists = await getMovieFileFromWebsiteUrl("https://www.vdocipher.com/blog/2020/09/encrypted-video-streaming-vdocipher-technology-details/", "Secure Your Videos with Vdocipher Video Streaming Solution");
