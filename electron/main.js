@@ -22,6 +22,8 @@ const nodeConsole = require("console");
 const myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 let child;
 
+let driver;
+
 function printBoth(str) {
   console.log("main.js:    " + str);
   myConsole.log("main.js:    " + str);
@@ -50,7 +52,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async() => {
   createWindow();
 
   app.on("activate", function () {
@@ -58,6 +60,22 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+
+  let options = new chrome.Options();
+  options.addArguments('--headless');
+  driver = await new Builder()
+    .forBrowser(Browser.CHROME)
+    // .setChromeOptions(options)
+    .build();
+
+  await driver.get('https://www.google.com/ncr');
+  driver.findElement(By.id("L2AGLb"))
+    .then(acceptButton => {
+      acceptButton.click();
+    })
+    .catch(error => {
+      console.log("no accept button");
+    })
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -166,22 +184,8 @@ function getDomainName(url) {
 ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
 
   console.log(`Received from frontend: ${movie_name}`);
-  let options = new chrome.Options();
-  options.addArguments('--headless');
-  let driver = await new Builder()
-    .forBrowser(Browser.CHROME)
-    .setChromeOptions(options)
-    .build();
+  
     try {
-      await driver.get('https://www.google.com/ncr');
-      driver.findElement(By.id("L2AGLb"))
-        .then(acceptButton => {
-          acceptButton.click();
-        })
-        .catch(error => {
-          console.log("no accept button");
-        })
-
       await driver.findElement(By.name('q')).sendKeys(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`, Key.RETURN);
       await driver.wait(until.titleIs(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}" - Google Search`), 4000);
 
@@ -220,82 +224,6 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
     } finally {
       // await driver.quit();
     }
-
-  // let stackRes = [];
-  // const searchUrl = `https://www.google.com/search?q="-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`;
-  
-  // const headers = {
-  //   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' // replace with your browser's user agent
-  // };
-
-  // let searchResponse = await axios.get(searchUrl, { headers });
-  // console.log(searchResponse);
-
-  // return {
-  //   status: "success",
-  //   data: searchResponse.data
-  // }
-  try {
-
-
-    // for (let i = 0; ; i = i + 10) {
-      // const searchUrl = `https://www.google.com/search?q=-inurl%3Ahtm+-inurl%3Ahtml+intitle%3A%22index+of%22+%28avi%7Cmp4%7Cmkv%29+%22${movie_name}%22`
-      // let $ = cheerio.load(searchResponse.data);
-      // let urlLists = [];
-      // $("a").each(async (index, aTag) => {
-      //   let wUrl = $(aTag).attr("href");
-      //   if (wUrl.indexOf("/url?q=") == 0){
-      //     wUrl = wUrl.substring(7);
-      //     let domain = getDomainName(wUrl);
-      //     if (domain && domain.indexOf("google.com") == -1) {
-      //       urlLists.push(wUrl);
-      //     }
-      //   }
-      // })
-      
-      // for(let eUrl of urlLists) {
-      //   console.log(eUrl);
-      //   const mlists = await getMovieFileFromWebsiteUrl(eUrl, eUrl);
-      //   if (mlists.length) {
-      //     // stackRes = [...stackRes, ...mlists];
-      //     mlists.map((mlist) => {
-      //       let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
-      //       if (!fres.length) {
-      //         stackRes.push(mlist);
-      //       }
-      //     })
-      //   } 
-      // }
-
-      // if (!urlLists.length || stackRes.length >= numResults) break;
-    // }
-
-
-    // console.log("===========================================");
-    // console.log(stackRes.length);
-    // console.log("===========================================");
-    // if (stackRes.length >= numResults) break;
-    // console.log(res);
-    // const mlists = await getMovieFileFromWebsiteUrl("https://www.vdocipher.com/blog/2020/09/encrypted-video-streaming-vdocipher-technology-details/", "Secure Your Videos with Vdocipher Video Streaming Solution");
-    // if (mlists.length) {
-    //   mlists.map((mlist) => {
-    //     let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
-    //     if (!fres.length) {
-    //       stackRes.push(mlist);
-    //     }
-    //   })
-    // }
-    // console.log(stackRes);
-    
-
-  } catch (error) {
-    console.error(error);
-    return {
-      status: "failed",
-      data: stackRes,
-      message: error
-    }
-  }
 })
 
 ipcMain.handle("send_search_query", async (event, movie_name) => {
