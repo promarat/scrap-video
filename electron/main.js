@@ -139,9 +139,14 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
   try {
 
     for (let i = 0; ; i = i + 10) {
+      // const searchUrl = `https://www.google.com/search?q=-inurl%3Ahtm+-inurl%3Ahtml+intitle%3A%22index+of%22+%28avi%7Cmp4%7Cmkv%29+%22${movie_name}%22`
       const searchUrl = `https://www.google.com/search?q="-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"&start=${i}`;
-  
-      let searchResponse = await axios.get(searchUrl);
+      
+      const headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' // replace with your browser's user agent
+      };
+
+      let searchResponse = await axios.get(searchUrl, { headers });
       // console.log(searchResponse);
       let $ = cheerio.load(searchResponse.data);
       let urlLists = [];
