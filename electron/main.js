@@ -91,15 +91,28 @@ ipcMain.on("open_json_file_sync", () => {
 });
 
 const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
-  console.log(wUrl);
+  const extensions = [".mp4", ".mkv"];
   // const testUrl = "https://www.vdocipher.com/blog/2020/09/encrypted-video-streaming-vdocipher-technology-details/";
   try {
     const response = await axios.get(wUrl);
     const $ = cheerio.load(response.data);
   
     const videoTags = $('video');
+    const aTags = $('a');
     
     videoSources = [];
+
+    aTags.each((index, element) => {
+      let sourceUrl = $(element).attr("href");
+      if (nLink.indexOf(".mp4") != - 1 || nLink.indexOf(".mkv") != -1) {
+        videoSources.push({
+          sourceUrl,
+          title,
+          wUrl
+        })
+      }
+    })
+
     videoTags.each((index, element) => {
       let sourceUrl = $(element).attr('src');
       if (!sourceUrl) {
