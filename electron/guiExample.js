@@ -34,7 +34,7 @@ const sendToProgram = (str) => {
 };
 
 const sendToProgramTest = (str) => { //Test
-  ipcRenderer.invoke("send_search_query_test", str).then((result) => {
+  ipcRenderer.invoke("send_search_query", str).then((result) => {
     if (result.status == "success") {
       movieArray = result.data;
       tableCreate(movieArray);
@@ -53,13 +53,13 @@ function tableTest(searchResults) {
 }
 
 function tableCreate(searchResults) {
-  var resultWrap = document.getElementById('result-wrap');
+  var resultWrap = document.querySelector('#result-wrap');
   var html = "";
-  for (let eRes of searchResults) {
+  var tRes = searchResults.length > 30 ? searchResults.slice(0, 30) : searchResults;
+  for (let eRes of tRes) {
     console.log(eRes);
-    html += `<button class="item-list" value="${eRes.sourceUrl}>${eRes.fname}</button>`;
+    html += `<div class="item-list" value="${eRes.sourceUrl}">${eRes.fname}</div>`;
   }
-  console.log(html);
   resultWrap.innerHTML = html;
 }
 
