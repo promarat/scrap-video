@@ -37,7 +37,7 @@ const sendToProgramTest = (str) => { //Test
   ipcRenderer.invoke("send_search_query_test", str).then((result) => {
     if (result.status == "success") {
       movieArray = result.data;
-      tableCreate(movieArray);
+      tableTest(movieArray);
       console.log(result, "result");
     } else {
       movieArray = result.data;
@@ -46,6 +46,33 @@ const sendToProgramTest = (str) => { //Test
     }
   });
 };
+
+function tableTest(searchResults) {
+  var resultWrap = document.getElementById('result-wrap');
+  // var html = "";
+  // for (let eRes of searchResults) {
+  //   html += `
+  //   <div class="card-list">
+  //     <a href="${eRes.wUrl}">
+  //     <div class="card-content">
+  //       <div class="thumbnail">
+  //         <video src="${eRes.sourceUrl}"></video>
+  //       </div>
+  //     </div>
+  //     <h5 class="movie-title">
+  //       ${eRes.title}
+  //     </h5>
+  //     <h5 class="">
+  //       ${eRes.sourceUrl}
+  //     </h5>
+  //     </a>
+  //     <button class="download-btn" value="${eRes.sourceUrl}">Download</button>
+  //   </div>`;
+  // }
+  // var tmpObj=document.createElement("div");
+  // tmpObj.innerHTML = html;
+  resultWrap.innerHTML = searchResults;
+}
 
 function tableCreate(searchResults) {
   var resultWrap = document.getElementById('result-wrap');

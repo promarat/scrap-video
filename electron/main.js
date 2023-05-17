@@ -136,47 +136,53 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
 
   console.log(`Received from frontend: ${movie_name}`);
   let stackRes = [];
+  const searchUrl = `https://www.google.com/search?q="-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`;
+  
+  const headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' // replace with your browser's user agent
+  };
+
+  let searchResponse = await axios.get(searchUrl, { headers });
+  console.log(searchResponse);
+
+  return {
+    status: "success",
+    data: searchResponse.data
+  }
   try {
 
-    for (let i = 0; ; i = i + 10) {
+
+    // for (let i = 0; ; i = i + 10) {
       // const searchUrl = `https://www.google.com/search?q=-inurl%3Ahtm+-inurl%3Ahtml+intitle%3A%22index+of%22+%28avi%7Cmp4%7Cmkv%29+%22${movie_name}%22`
-      const searchUrl = `https://www.google.com/search?q="-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"&start=${i}`;
+      // let $ = cheerio.load(searchResponse.data);
+      // let urlLists = [];
+      // $("a").each(async (index, aTag) => {
+      //   let wUrl = $(aTag).attr("href");
+      //   if (wUrl.indexOf("/url?q=") == 0){
+      //     wUrl = wUrl.substring(7);
+      //     let domain = getDomainName(wUrl);
+      //     if (domain && domain.indexOf("google.com") == -1) {
+      //       urlLists.push(wUrl);
+      //     }
+      //   }
+      // })
       
-      const headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' // replace with your browser's user agent
-      };
+      // for(let eUrl of urlLists) {
+      //   console.log(eUrl);
+      //   const mlists = await getMovieFileFromWebsiteUrl(eUrl, eUrl);
+      //   if (mlists.length) {
+      //     // stackRes = [...stackRes, ...mlists];
+      //     mlists.map((mlist) => {
+      //       let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
+      //       if (!fres.length) {
+      //         stackRes.push(mlist);
+      //       }
+      //     })
+      //   } 
+      // }
 
-      let searchResponse = await axios.get(searchUrl, { headers });
-      // console.log(searchResponse);
-      let $ = cheerio.load(searchResponse.data);
-      let urlLists = [];
-      $("a").each(async (index, aTag) => {
-        let wUrl = $(aTag).attr("href");
-        if (wUrl.indexOf("/url?q=") == 0){
-          wUrl = wUrl.substring(7);
-          let domain = getDomainName(wUrl);
-          if (domain && domain.indexOf("google.com") == -1) {
-            urlLists.push(wUrl);
-          }
-        }
-      })
-      
-      for(let eUrl of urlLists) {
-        console.log(eUrl);
-        const mlists = await getMovieFileFromWebsiteUrl(eUrl, eUrl);
-        if (mlists.length) {
-          // stackRes = [...stackRes, ...mlists];
-          mlists.map((mlist) => {
-            let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
-            if (!fres.length) {
-              stackRes.push(mlist);
-            }
-          })
-        } 
-      }
-
-      if (!urlLists.length || stackRes.length >= numResults) break;
-    }
+      // if (!urlLists.length || stackRes.length >= numResults) break;
+    // }
 
 
     // console.log("===========================================");
@@ -194,10 +200,7 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
     //   })
     // }
     // console.log(stackRes);
-    return {
-      status: "success",
-      data: stackRes
-    }
+    
 
   } catch (error) {
     console.error(error);
