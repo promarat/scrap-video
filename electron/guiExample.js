@@ -37,7 +37,7 @@ const sendToProgramTest = (str) => { //Test
   ipcRenderer.invoke("send_search_query_test", str).then((result) => {
     if (result.status == "success") {
       movieArray = result.data;
-      tableTest(movieArray);
+      tableCreate(movieArray);
       console.log(result, "result");
     } else {
       movieArray = result.data;

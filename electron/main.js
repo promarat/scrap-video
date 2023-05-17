@@ -9,6 +9,9 @@ const customsearch = google.customsearch('v1');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
+
 const API_KEY = 'AIzaSyAGU8VlGdfd4h6R99scoD8ph0UoIugETH0';
 const CX = '54ede4d7347744cb6';
 // const CX = 'f1983f55b40a34a01';
@@ -135,20 +138,66 @@ function getDomainName(url) {
 ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
 
   console.log(`Received from frontend: ${movie_name}`);
-  let stackRes = [];
-  const searchUrl = `https://www.google.com/search?q="-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`;
+  let options = new chrome.Options();
+  options.addArguments('--headless');
+  let driver = await new Builder()
+    .forBrowser(Browser.CHROME)
+    // .setChromeOptions(options)
+    .build();
+    try {
+      await driver.get('https://www.google.com/ncr');
+      await driver.findElement(By.name('q')).sendKeys(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`, Key.RETURN);
+      await driver.wait(until.titleIs(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}" - Google Search`), 1000);
+
+      let stackRes = [];
+      let pageSource = await driver.getPageSource();
+      let $ = cheerio.load(pageSource);
+      let urlLists = [];
+      console.log($("a").length);
+      $("#rso").find("a").each(async (index, aTag) => {
+        let wUrl = $(aTag).attr("href");
+        let domain = getDomainName(wUrl);
+        if (domain && domain.indexOf("google.com") == -1) {
+          urlLists.push(wUrl);
+        }
+      })
+
+      for(let eUrl of urlLists) {
+        console.log(eUrl);
+        const mlists = await getMovieFileFromWebsiteUrl(eUrl, eUrl);
+        if (mlists.length) {
+          // stackRes = [...stackRes, ...mlists];
+          mlists.map((mlist) => {
+            let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
+            if (!fres.length) {
+              stackRes.push(mlist);
+            }
+          })
+        }
+      }
+
+      return {
+        status: "success",
+        data: searchResponse.data
+      }
+    } finally {
+      // await driver.quit();
+    }
+
+  // let stackRes = [];
+  // const searchUrl = `https://www.google.com/search?q="-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`;
   
-  const headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' // replace with your browser's user agent
-  };
+  // const headers = {
+  //   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' // replace with your browser's user agent
+  // };
 
-  let searchResponse = await axios.get(searchUrl, { headers });
-  console.log(searchResponse);
+  // let searchResponse = await axios.get(searchUrl, { headers });
+  // console.log(searchResponse);
 
-  return {
-    status: "success",
-    data: searchResponse.data
-  }
+  // return {
+  //   status: "success",
+  //   data: searchResponse.data
+  // }
   try {
 
 
