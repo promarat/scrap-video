@@ -107,7 +107,7 @@ const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
       if (sourceUrl){
         if (sourceUrl.indexOf(".mp4") != - 1 || sourceUrl.indexOf(".mkv") != -1) {
           if (sourceUrl.charAt(0) == "/") sourceUrl = sourceUrl.substring(1);
-          if (!getDomainName(sourceUrl)) sourceUrl = wUrl + sourceUrl;
+          if (getDomainName(sourceUrl) == "") sourceUrl = wUrl + sourceUrl;
           videoSources.push({
             sourceUrl,
             title,
@@ -138,17 +138,21 @@ const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
 }
 
 function getDomainName(url) {
-  var domain = '';
-  // find & remove protocol (http, ftp, etc.) and get domain
-  if (url.indexOf("://") > -1) {
-    domain = url.split('/')[2];
-  }
-  else {
-    domain = url.split('/')[0];
-  }
-  // remove port number if there is one
-  domain = domain.split(':')[0];
 
+  var domain = '';
+  
+  if (url.indexOf("http") != -1 || url.indexOf("https") != -1 || url.indexOf("ftp") != -1) {
+    // find & remove protocol (http, ftp, etc.) and get domain
+    if (url.indexOf("://") > -1) {
+      domain = url.split('/')[2];
+    }
+    else {
+      domain = url.split('/')[0];
+    }
+    // remove port number if there is one
+    domain = domain.split(':')[0];
+
+  } 
   return domain;
 }
 
