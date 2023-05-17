@@ -49,28 +49,6 @@ const sendToProgramTest = (str) => { //Test
 
 function tableTest(searchResults) {
   var resultWrap = document.getElementById('result-wrap');
-  // var html = "";
-  // for (let eRes of searchResults) {
-  //   html += `
-  //   <div class="card-list">
-  //     <a href="${eRes.wUrl}">
-  //     <div class="card-content">
-  //       <div class="thumbnail">
-  //         <video src="${eRes.sourceUrl}"></video>
-  //       </div>
-  //     </div>
-  //     <h5 class="movie-title">
-  //       ${eRes.title}
-  //     </h5>
-  //     <h5 class="">
-  //       ${eRes.sourceUrl}
-  //     </h5>
-  //     </a>
-  //     <button class="download-btn" value="${eRes.sourceUrl}">Download</button>
-  //   </div>`;
-  // }
-  // var tmpObj=document.createElement("div");
-  // tmpObj.innerHTML = html;
   resultWrap.innerHTML = searchResults;
 }
 
@@ -78,23 +56,7 @@ function tableCreate(searchResults) {
   var resultWrap = document.getElementById('result-wrap');
   var html = "";
   for (let eRes of searchResults) {
-    html += `
-    <div class="card-list">
-      <a href="${eRes.wUrl}">
-      <div class="card-content">
-        <div class="thumbnail">
-          <video src="${eRes.sourceUrl}"></video>
-        </div>
-      </div>
-      <h5 class="movie-title">
-        ${eRes.title}
-      </h5>
-      <h5 class="">
-        ${eRes.sourceUrl}
-      </h5>
-      </a>
-      <button class="download-btn" value="${eRes.sourceUrl}">Download</button>
-    </div>`;
+    html += `<button class="item-list" value="${eRes.sourceUrl}>${eRes.fname}</button>`;
   }
   var tmpObj=document.createElement("div");
   tmpObj.innerHTML = html;
