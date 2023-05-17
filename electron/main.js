@@ -146,6 +146,14 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
     .build();
     try {
       await driver.get('https://www.google.com/ncr');
+      driver.findElement(By.id("L2AGLb"))
+        .then(acceptButton => {
+          acceptButton.click();
+        })
+        .catch(error => {
+          console.log("no accept button");
+        })
+
       await driver.findElement(By.name('q')).sendKeys(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`, Key.RETURN);
       await driver.wait(until.titleIs(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}" - Google Search`), 1000);
 
