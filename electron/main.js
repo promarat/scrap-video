@@ -104,12 +104,14 @@ const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
 
     aTags.each((index, element) => {
       let sourceUrl = $(element).attr("href");
-      if (nLink.indexOf(".mp4") != - 1 || nLink.indexOf(".mkv") != -1) {
-        videoSources.push({
-          sourceUrl,
-          title,
-          wUrl
-        })
+      if (sourceUrl){
+        if (sourceUrl.indexOf(".mp4") != - 1 || sourceUrl.indexOf(".mkv") != -1) {
+          videoSources.push({
+            sourceUrl,
+            title,
+            wUrl
+          })
+        }
       }
     })
 
