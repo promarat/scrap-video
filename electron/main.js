@@ -117,21 +117,63 @@ const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
   }
 }
 
+function getDomainName(url) {
+  var domain = '';
+  // find & remove protocol (http, ftp, etc.) and get domain
+  if (url.indexOf("://") > -1) {
+    domain = url.split('/')[2];
+  }
+  else {
+    domain = url.split('/')[0];
+  }
+  // remove port number if there is one
+  domain = domain.split(':')[0];
+
+  return domain;
+}
+
 ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
 
   console.log(`Received from frontend: ${movie_name}`);
   let stackRes = [];
   try {
-    const mlists = await getMovieFileFromWebsiteUrl("https://www.vdocipher.com/blog/2020/09/encrypted-video-streaming-vdocipher-technology-details/", "Secure Your Videos with Vdocipher Video Streaming Solution");
-    if (mlists.length) {
-      mlists.map((mlist) => {
-        let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
-        if (!fres.length) {
-          stackRes.push(mlist);
-        }
-      })
-    }
-    console.log(stackRes);
+
+    const searchUrl = `https://www.google.com/search?q=-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`;
+
+    let searchResponse = await axios.get(searchUrl);
+    let $ = cheerio.load(searchResponse.data);
+    $("rso").find("a").each(async (aTag) => {
+      const wUrl = $(aTag).attr("href");
+      let domain = getDomainName(wUrl);
+      if (domain && domain != "www.google.com") {
+        const mlists = await getMovieFileFromWebsiteUrl(wUrl, wUrl);
+        if (mlists.length) {
+          // stackRes = [...stackRes, ...mlists];
+          mlists.map((mlist) => {
+            let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
+            if (!fres.length) {
+              stackRes.push(mlist);
+            }
+          })
+        } 
+      }
+    })
+
+    console.log("===========================================");
+    console.log(stackRes.length);
+    console.log("===========================================");
+    // if (stackRes.length >= numResults) break;
+    // console.log(res);
+    // const mlists = await getMovieFileFromWebsiteUrl("https://www.vdocipher.com/blog/2020/09/encrypted-video-streaming-vdocipher-technology-details/", "Secure Your Videos with Vdocipher Video Streaming Solution");
+    // if (mlists.length) {
+    //   mlists.map((mlist) => {
+    //     let fres = stackRes.filter((ers) => ers.sourceUrl == mlist.sourceUrl);
+    //     if (!fres.length) {
+    //       stackRes.push(mlist);
+    //     }
+    //   })
+    // }
+    // console.log(stackRes);
     return {
       status: "success",
       data: stackRes

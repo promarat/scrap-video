@@ -62,6 +62,9 @@ function tableCreate(searchResults) {
       <h5 class="movie-title">
         ${eRes.title}
       </h5>
+      <h5 class="">
+        ${eRes.sourceUrl}
+      </h5>
       </a>
       <button class="download-btn" value="${eRes.sourceUrl}">Download</button>
     </div>`;
