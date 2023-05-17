@@ -106,6 +106,8 @@ const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
       let sourceUrl = $(element).attr("href");
       if (sourceUrl){
         if (sourceUrl.indexOf(".mp4") != - 1 || sourceUrl.indexOf(".mkv") != -1) {
+          if (sourceUrl.charAt(0) == "/") sourceUrl = sourceUrl.substring(1);
+          if (!getDomainName(sourceUrl)) sourceUrl = wUrl + sourceUrl;
           videoSources.push({
             sourceUrl,
             title,
@@ -181,6 +183,7 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
         let wUrl = $(aTag).attr("href");
         let domain = getDomainName(wUrl);
         if (domain && domain.indexOf("google.com") == -1) {
+          if (wUrl.charAt(wUrl.length - 1) != "/") wUrl += "/";
           urlLists.push(wUrl);
         }
       })
