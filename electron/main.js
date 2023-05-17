@@ -170,7 +170,7 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
   options.addArguments('--headless');
   let driver = await new Builder()
     .forBrowser(Browser.CHROME)
-    // .setChromeOptions(options)
+    .setChromeOptions(options)
     .build();
     try {
       await driver.get('https://www.google.com/ncr');
