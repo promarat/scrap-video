@@ -58,7 +58,7 @@ function tableCreate(searchResults) {
   var tRes = searchResults.length > 30 ? searchResults.slice(0, 30) : searchResults;
   for (let eRes of tRes) {
     console.log(eRes);
-    html += `<div class="item-list" value="${eRes.sourceUrl}">${eRes.fname}</div>`;
+    html += `<button class="item-list" value="${eRes.sourceUrl}">${eRes.fname}</button>`;
   }
   resultWrap.innerHTML = html;
 }
