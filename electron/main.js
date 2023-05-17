@@ -186,7 +186,7 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
 
       return {
         status: "success",
-        data: searchResponse.data
+        data: stackRes
       }
     } finally {
       // await driver.quit();
