@@ -176,7 +176,7 @@ ipcMain.handle("send_search_query_test", async (event, movie_name) => { //Test
         })
 
       await driver.findElement(By.name('q')).sendKeys(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`, Key.RETURN);
-      await driver.wait(until.titleIs(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}" - Google Search`), 3000);
+      await driver.wait(until.titleIs(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}" - Google Search`), 4000);
 
       let stackRes = [];
       let pageSource = await driver.getPageSource();
