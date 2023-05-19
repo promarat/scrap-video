@@ -26,12 +26,15 @@ async function createWindow() {
   console.log(`Operating System: ${process.platform}`);
   console.log(`CPU Architecture: ${os.arch()}`);
 
-  // const service = new chrome.ServiceBuilder(path.join(__dirname, "../drivers/chromedriver.exe"));
+  const servicePath = process.platform == win32 ? path.join(__dirname, "../drivers/chromedriver.exe") 
+    : os.arch() == "x64" ? path.join(__dirname, "../drivers/chromedriver_mac64/chromedriver") 
+    : path.join(__dirname, "../drivers/chromedriver_mac_arm64/chromedriver");
+  const service = new chrome.ServiceBuilder(servicePath);
   let options = new chrome.Options();
   options.addArguments('--headless');
   driver = await new Builder()
     .forBrowser(Browser.CHROME)
-    // .setChromeService(service)
+    .setChromeService(service)
     // .setChromeOptions(options)
     .build();
 

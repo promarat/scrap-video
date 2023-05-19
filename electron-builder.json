@@ -8,7 +8,7 @@
       "electron/*",
       "package.json",
       "main.js",
-      "drivers/*"
+      "drivers/**/*"
     ],
     "extraResources": [
       {
