@@ -1,0 +1,52 @@
+{
+    "appId": "com.example.myapp",
+    "productName": "MDork",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/*",
+      "package.json",
+      "main.js",
+      "drivers/*"
+    ],
+    "extraResources": [
+      {
+        "from": "drivers/",
+        "to": "drivers/"
+      }
+    ],
+    "asar": true,
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.icns",
+      "target": {
+        "target": "dmg",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": {
+        "target": "nsis",
+        "arch": [
+          "x64",
+          "ia32"
+        ]
+      }
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "target": {
+        "target": "AppImage",
+        "arch": [
+          "x64",
+          "armv7l",
+          "arm64"
+        ]
+      }
+    }
+  }

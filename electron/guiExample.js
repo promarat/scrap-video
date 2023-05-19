@@ -8,7 +8,7 @@ ipcRenderer.on("run-command-result", (event, result) => {
     console.log("Output:", result.output);
   }
 });
-
+// For Mac
 const sendToProgram = (str) => {
   ipcRenderer.invoke("send_search_query", str).then((result) => {
     if (result.status == "success") {
@@ -22,7 +22,7 @@ const sendToProgram = (str) => {
     }
   });
 };
-
+// For Mac
 function tableCreate(searchResults) {
   var resultWrap = document.querySelector('#result-wrap');
   var html = "";
@@ -38,7 +38,7 @@ const sendCodeFunction = () => {
   const stringToSend = document.getElementById("string_to_send").value;
   sendToProgram(stringToSend);
 };
-
+// For Mac
 const sendDownloadRequest = (event) => {
   if (event.target.tagName === 'BUTTON') {
     const sUrl = event.target.value;
