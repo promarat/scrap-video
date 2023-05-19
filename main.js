@@ -1,9 +1,10 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require("electron");
+const squirrelStartup = require('electron-squirrel-startup');
 const DownloadManager = require("electron-download-manager");
 const exec = require("child_process").exec;
 const path = require("path");
-
+// Mac OS
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -11,63 +12,60 @@ const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 
 const numResults = 5;
-
-const nodeConsole = require("console");
-const myConsole = new nodeConsole.Console(process.stdout, process.stderr);
-let child;
-
+// Mac OS
 let driver;
 
-function printBoth(str) {
-  console.log("main.js:    " + str);
-  myConsole.log("main.js:    " + str);
+if (squirrelStartup) {
+  app.quit();
 }
 
 // Create the browser window.
-function createWindow() {
+async function createWindow() {
+
+  const service = new chrome.ServiceBuilder(path.join(__dirname, "../drivers/chromedriver.exe"));
+  let options = new chrome.Options();
+  options.addArguments('--headless');
+  driver = await new Builder()
+    .forBrowser(Browser.CHROME)
+    .setChromeService(service)
+    .setChromeOptions(options)
+    .build();
+
+  await driver.get('https://www.google.com/ncr');
+  driver.findElement(By.id("L2AGLb")).then((element) => {
+    element.click();
+  });
+
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 600,
     resizable: true,
     webPreferences: {
-      preload: path.join(__dirname, "guiExample.js"),
+      preload: path.join(__dirname, "electron/guiExample.js"),
       contextIsolation: true,
       nodeIntegration: true,
     },
   });
 
   // Load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "guiExample.html"));
+  mainWindow.loadFile(path.join(__dirname, "electron/guiExample.html"));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(async() => {
+app.whenReady().then(() => {
   createWindow();
-
+// Mac OS
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
-
-  let options = new chrome.Options();
-  options.addArguments('--headless');
-  try{
-    driver = await new Builder()
-      .forBrowser(Browser.CHROME)
-      // .setChromeOptions(options)
-      .build();
   
-    await driver.get('https://www.google.com/ncr');
-    await driver.findElement(By.id("L2AGLb"));
-  } catch (err) {
-    console.log(err);
-  }
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -88,7 +86,7 @@ ipcMain.on("execute", (command) => {
     }
   });
 });
-
+// Mac OS
 const getMovieFileFromWebsiteUrl = async (wUrl, title) => {
   const extensions = [".mp4", ".mkv"];
   try {
@@ -167,6 +165,7 @@ ipcMain.handle("send_search_query", async (event, movie_name) => { //Test
   console.log(`Received from frontend: ${movie_name}`);
   
     try {
+
       await driver.findElement(By.name('q')).sendKeys(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}"`, Key.RETURN);
       await driver.wait(until.titleIs(`-inurl:htm -inurl:html intitle:"index of" (avi|mp4|mkv) "${movie_name}" - Google Search`), 4000);
 
@@ -211,28 +210,7 @@ ipcMain.handle("send_search_query", async (event, movie_name) => { //Test
     }
 })
 
-ipcMain.handle("send_search_query_test", async (event, movie_name) => {
-
-  console.log(`Received from frontend: ${movie_name}`);
-
-  return {
-    status: "success",
-    data: [
-      {fname: "aaaaaaa", sourceUrl: "bbbbbbb"}
-    ]
-  }
-  
-})
-
-
 ipcMain.on("download_request", (event, url) => {
-  // const options = {
-  //   url: url,
-  //   onProgress: (percent) => {
-  //     console.log(`Download progress: ${percent}%`);
-  //   }
-  // };
-
   DownloadManager.register({
     downloadFolder: app.getPath("downloads")
   });
@@ -248,20 +226,7 @@ ipcMain.on("download_request", (event, url) => {
         console.log(error);
         return;
     }
-
     console.log("DONE: " + info.url);
 });
 });
 
-ipcMain.on("open_json_file_async", () => {
-  const fs = require("fs");
-
-  const fileName = "./config.json";
-  const data = fs.readFileSync(fileName);
-  const json = JSON.parse(data);
-
-  printBoth("Called through ipc.send from guiExample.js");
-  printBoth(
-    `Data from config.json:\nA_MODE = ${json.A_MODE}\nB_MODE = ${json.B_MODE}\nC_MODE = ${json.C_MODE}\nD_MODE = ${json.D_MODE}`
-  );
-});

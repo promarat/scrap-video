@@ -1,13 +1,13 @@
 {
   "name": "electron-gui",
-  "version": "1.0.1",
+  "version": "1.0.8",
   "description": "scrap the movies from google search.",
   "author": {
     "name": "Pro Dev",
     "email": "prodev@example.com",
     "url": "https://example.com/"
   },
-  "main": "./electron/main.js",
+  "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -29,8 +29,6 @@
     "cheerio": "^1.0.0-rc.12",
     "electron-download-manager": "^2.1.2",
     "electron-squirrel-startup": "^1.0.0",
-    "google-it": "^1.6.4",
-    "jquery": "^3.7.0",
     "selenium-webdriver": "^4.9.2"
   }
 }
