@@ -22,13 +22,16 @@ if (squirrelStartup) {
 // Create the browser window.
 async function createWindow() {
 
-  const service = new chrome.ServiceBuilder(path.join(__dirname, "../drivers/chromedriver.exe"));
+  console.log(`Operating System: ${process.platform}`);
+  console.log(`CPU Architecture: ${os.arch()}`);
+
+  // const service = new chrome.ServiceBuilder(path.join(__dirname, "../drivers/chromedriver.exe"));
   let options = new chrome.Options();
   options.addArguments('--headless');
   driver = await new Builder()
     .forBrowser(Browser.CHROME)
-    .setChromeService(service)
-    .setChromeOptions(options)
+    // .setChromeService(service)
+    // .setChromeOptions(options)
     .build();
 
   await driver.get('https://www.google.com/ncr');
