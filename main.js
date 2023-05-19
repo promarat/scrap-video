@@ -4,6 +4,7 @@ const squirrelStartup = require('electron-squirrel-startup');
 const DownloadManager = require("electron-download-manager");
 const exec = require("child_process").exec;
 const path = require("path");
+const os = require('os');
 // Mac OS
 const axios = require('axios');
 const cheerio = require('cheerio');
